@@ -236,6 +236,10 @@ kadai-e() {
             echo "kadai-e: Missing '-Wall' option."
         fi
 
+        if [ ! -f result.* ]; then
+            echo "kadai-e: Missing result image file"
+        fi
+
         if [ ! -f report-e.txt ]; then
             echo "kadai-e: Missing report-e.txt"
         fi
