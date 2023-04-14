@@ -8,6 +8,14 @@ warn() { echo $1; state=1; }
 dir=$(mktemp -d)
 trap "rm -rf $dir" 0
 
+check-report() {
+    if [ ! -f report-$1.txt ]; then
+        $2 "kadai-$1: Missing report-$1.txt."
+    elif [ `cat report-$1.txt | wc -l` -eq 0 ]; then
+        $2 "kadai-$1: 'report-$1.txt' is empty!"
+    fi
+}
+
 kadai-a() {
     if [ -d kadai-a ]; then
         cp -r kadai-a $dir
@@ -37,9 +45,7 @@ kadai-a() {
             warn "kadai-a: Missing '-Wall' option."
         fi
 
-        if [ ! -f report-a.txt ]; then
-            warn "kadai-a: Missing report-a.txt"
-        fi
+        check-report a warn
 
         popd > /dev/null 2>&1
     else
@@ -84,9 +90,7 @@ kadai-b() {
             warn "kadai-b: Missing '-Wall' option."
         fi
 
-        if [ ! -f report-b.txt ]; then
-            warn "kadai-b: Missing report-b.txt"
-        fi
+        check-report b warn
 
         popd > /dev/null 2>&1
     else
@@ -133,9 +137,7 @@ kadai-c() {
             warn "kadai-c: Missing '-Wall' option."
         fi
 
-        if [ ! -f report-c.txt ]; then
-            warn "kadai-c: Missing report-c.txt"
-        fi
+        check-report c warn
 
         popd > /dev/null 2>&1
     else
@@ -183,9 +185,7 @@ kadai-d() {
             warn "kadai-d: Missing '-Wall' option."
         fi
 
-        if [ ! -f report-d.txt ]; then
-            warn "kadai-d: Missing report-d.txt"
-        fi
+        check-report d warn
 
         popd > /dev/null 2>&1
     else
@@ -240,9 +240,7 @@ kadai-e() {
             echo "kadai-e: Missing result image file"
         fi
 
-        if [ ! -f report-e.txt ]; then
-            echo "kadai-e: Missing report-e.txt"
-        fi
+        check-report e echo
 
         popd > /dev/null 2>&1
     fi
