@@ -5,7 +5,7 @@
 
 state=0
 warn() { echo $1; state=1; }
-dir=$(mktemp -d XXXX)
+dir=$(mktemp -d)
 trap "rm -rf $dir" 0
 
 kadai-a() {
@@ -82,6 +82,10 @@ kadai-b() {
 
         if [ `grep '\-Wall' Makefile | wc -l` -eq 0 ]; then
             warn "kadai-b: Missing '-Wall' option."
+        fi
+
+        if [ ! -f report-b.txt ]; then
+            warn "kadai-b: Missing report-b.txt"
         fi
 
         popd > /dev/null 2>&1
@@ -179,6 +183,10 @@ kadai-d() {
             warn "kadai-d: Missing '-Wall' option."
         fi
 
+        if [ ! -f report-d.txt ]; then
+            warn "kadai-d: Missing report-d.txt"
+        fi
+
         popd > /dev/null 2>&1
     else
         warn "kadai-d: No 'kadai-d' directory!"
@@ -228,19 +236,23 @@ kadai-e() {
             echo "kadai-e: Missing '-Wall' option."
         fi
 
+        if [ ! -f report-e.txt ]; then
+            echo "kadai-e: Missing report-e.txt"
+        fi
+
         popd > /dev/null 2>&1
     fi
 }
 
-echo "#############################################"
-echo "Running tests..."
-if [ -z $1 ] || [ $1 = "a" ]; then kadai-a; fi
-if [ -z $1 ] || [ $1 = "b" ]; then kadai-b; fi
-if [ -z $1 ] || [ $1 = "c" ]; then kadai-c; fi
-if [ -z $1 ] || [ $1 = "d" ]; then kadai-d; fi
-if [ -z $1 ] || [ $1 = "e" ]; then kadai-e; fi
-if [ $state -eq 0 ]; then
-    echo "All tests have passed!"
+if [ $# -eq 0 ]; then
+    echo "#############################################"
+    echo "Running tests..."
 fi
-echo "#############################################"
+for arg in {a..e}; do
+    if [ $# -eq 0 ] || [[ "$@" == *"$arg"* ]]; then kadai-$arg; fi
+done
+if [ $# -eq 0 ]; then
+    if [ $state -eq 0 ]; then echo "All tests have passed!"; fi
+    echo "#############################################"
+fi
 exit $state
