@@ -1,7 +1,7 @@
 # Customized for kadai 2
 kadai-a/measure
 kadai-b/mycp
-kadai-c/measure*
+kadai-c/measure[1,2]
 kadai-d/mywc
 kadai-e/myls
 
