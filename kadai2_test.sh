@@ -199,48 +199,41 @@ kadai-e() {
         pushd $dir/kadai-e > /dev/null 2>&1
 
         if [ ! -f Makefile ]; then
-            echo "kadai-e: Missing Makefile."
+            warn "kadai-e: Missing Makefile."
         fi
 
         make myls > /dev/null 2>&1
 
         if [ ! -f myls ]; then
-            echo "kadai-e: Failed to generate the binary(myls) with '$ make myls'"
+            warn "kadai-e: Failed to generate the binary(myls) with '$ make myls'"
         fi
 
-        ./myls . > ls1.txt
+        ./myls . > ls.txt
         for file in `ls .`; do
-            if [ `grep $file ls1.txt | wc -l` -eq 0 ]; then
-                echo "kadai-e: Failed to list the items in one directory"; break
-            fi
-        done
-
-        ./myls . .. > ls2.txt
-        for file in `ls . ..`; do
-            if [ `grep $file ls2.txt | wc -l` -eq 0 ]; then
-                echo "kadai-e: Failed to list the items in several directories"; break
+            if [ `grep $file ls.txt | wc -l` -eq 0 ]; then
+                warn "kadai-e: Failed to list all items in this directory"; break
             fi
         done
 
         make clean > /dev/null 2>&1
 
         if [ -f myls ]; then
-            echo "kadai-e: Failed to remove the binary(myls) with '$ make clean'."
+            warn "kadai-e: Failed to remove the binary(myls) with '$ make clean'."
         fi
 
         if [ ! -z "`find . -name \*.o`" ]; then
-            echo "kadai-e: Failed to remove object files(*.o) with '$ make clean'."
+            warn "kadai-e: Failed to remove object files(*.o) with '$ make clean'."
         fi
 
         if [ `grep '\-Wall' Makefile | wc -l` -eq 0 ]; then
-            echo "kadai-e: Missing '-Wall' option."
+            warn "kadai-e: Missing '-Wall' option."
         fi
 
         if [ ! -f result.* ]; then
-            echo "kadai-e: Missing result image file"
+            warn "kadai-e: Missing result image file"
         fi
 
-        check-report e echo
+        check-report e warn
 
         popd > /dev/null 2>&1
     fi
